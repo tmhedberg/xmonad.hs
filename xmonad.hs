@@ -24,7 +24,7 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt"
                                                        , modMask = mod4Mask
                                                        , focusedBorderColor = "#0000FF"
                                                        , normalBorderColor = "#111111"
-                                                       , manageHook = floatNextHook <+> manageDocks <+> (isFullscreen --> doFloat) <+> manageHook defaultConfig
+                                                       , manageHook = floatNextHook <+> manageDocks <+> (isFullscreen --> doFullFloat) <+> manageHook defaultConfig
                                                        , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $ avoidStruts myLayouts
                                                        } `additionalKeys`
                                                        [ ((mod4Mask .|. shiftMask, xK_l), spawn "slock")
