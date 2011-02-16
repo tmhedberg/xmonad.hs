@@ -59,10 +59,10 @@ toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b)
 
 myLayouts = (maximize $ minimize $ Tall 1 (3/100) (1/2)) 
 	||| simpleTabbed 
-	||| (maximize $ minimize $ Mirror $ Tall 1 (3/100) (1/2)) 
+--	||| (maximize $ minimize $ Mirror $ Tall 1 (3/100) (1/2)) 
 	||| Full 
-	||| (maximize $ minimize $ Grid) 
-	||| (maximize $ minimize $ simpleFloat)
+--	||| (maximize $ minimize $ Grid) 
+--	||| (maximize $ minimize $ simpleFloat)
 
 greekLCaseWorkspaces = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι"]
 greekUCaseWorkspaces = [[chr (ord (head ch) - 0x20)] | ch <- greekLCaseWorkspaces]
