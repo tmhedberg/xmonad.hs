@@ -19,7 +19,7 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Util.EZConfig(additionalKeys)
 
 main = xmonad =<< myStatusBar myConfig
-	
+        
 myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt" 
                                                        , modMask = mod4Mask
                                                        , focusedBorderColor = "#0000FF"
@@ -50,19 +50,19 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt"
                                                        ]
 
 myStatusBar conf = statusBar ("dzen2 " ++ flags) dzenPP toggleStrutsKey conf
-	where fg = "'#a8a3f7'"	-- Default: #a8a3f7
-       	      bg = "'#101f3e'"	-- Default: #3f3c6d
-	      flags = "-e 'onstart=lower' -w 1055 -ta l -fg " ++ fg ++ " -bg " ++ bg ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
+        where fg = "'#a8a3f7'"  -- Default: #a8a3f7
+              bg = "'#101f3e'"  -- Default: #3f3c6d
+              flags = "-e 'onstart=lower' -w 1055 -ta l -fg " ++ fg ++ " -bg " ++ bg ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
 
 toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b)
 
 myLayouts = (maximize $ minimize $ Tall 1 (3/100) (1/2)) 
-	||| simpleTabbed 
---	||| (maximize $ minimize $ Mirror $ Tall 1 (3/100) (1/2)) 
-	||| Full 
---	||| (maximize $ minimize $ Grid) 
---	||| (maximize $ minimize $ simpleFloat)
+        ||| simpleTabbed 
+--      ||| (maximize $ minimize $ Mirror $ Tall 1 (3/100) (1/2)) 
+        ||| Full 
+--      ||| (maximize $ minimize $ Grid) 
+--      ||| (maximize $ minimize $ simpleFloat)
 
 greekLCaseWorkspaces = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι"]
 greekUCaseWorkspaces = [[chr (ord (head ch) - 0x20)] | ch <- greekLCaseWorkspaces]
