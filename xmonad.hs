@@ -44,7 +44,7 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt"
                                                        , ((mod4Mask .|. shiftMask, xK_Left), sendMessage $ Swap L)
                                                        , ((mod4Mask .|. shiftMask, xK_Right), sendMessage $ Swap R)
                                                        , ((mod4Mask, xK_g), goToSelected defaultGSConfig)
-                                                       , ((mod4Mask .|. shiftMask, xK_backslash), spawn "chromium")
+                                                       , ((mod4Mask .|. shiftMask, xK_backslash), spawn "firefox")
                                                        , ((mod4Mask, xK_f), toggleFloatNext)
                                                        , ((mod4Mask, xK_d), toggleFloatAllNew)
                                                        ]
