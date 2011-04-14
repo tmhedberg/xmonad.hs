@@ -16,6 +16,7 @@ import XMonad.Layout.SimpleFloat
 import XMonad.Layout.TabBarDecoration
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
+import XMonad.StackSet (focusDown)
 import XMonad.Util.EZConfig(additionalKeys)
 
 main = xmonad =<< myStatusBar myConfig
@@ -24,7 +25,7 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt"
                                                        , modMask = mod4Mask
                                                        , focusedBorderColor = "#0000FF"
                                                        , normalBorderColor = "#111111"
-                                                       , manageHook = floatNextHook <+> manageDocks <+> (isFullscreen --> doFullFloat) <+> manageHook defaultConfig
+                                                       , manageHook = floatNextHook <+> manageDocks <+> (isFullscreen --> doFullFloat) <+> composeAll [className =? c --> doF focusDown | c <- noStealFocusWins] <+> manageHook defaultConfig
                                                        , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $ avoidStruts myLayouts
                                                        } `additionalKeys`
                                                        [ ((mod4Mask .|. shiftMask, xK_l), spawn "slock")
@@ -63,3 +64,6 @@ myLayouts = (maximize $ minimize $ Tall 1 (3/100) (1/2))
 greekLCaseWorkspaces = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι"]
 greekUCaseWorkspaces = [[chr (ord (head ch) - 0x20)] | ch <- greekLCaseWorkspaces]
 latinUCaseWorkspaces = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+
+-- List of X11 window classes which should never steal focus
+noStealFocusWins = ["Pidgin"]
