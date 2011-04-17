@@ -72,9 +72,8 @@ myStatusBar conf = statusBar ("dzen2 " ++ flags) dzenPP' toggleStrutsKey conf
                 , ppWsSep = ""
                 , ppSep = ""
                 , ppLayout = dzenColor dk md . \x -> pad $ case x of
-                    "TilePrime Horizontal" -> "TTT"
-                    "TilePrime Vertical" -> "[]="
-                    "Hinted Full" -> "[ ]"
+                    "Maximize Minimize Tall" -> "MMT"
+                    "Tabbed Simplest" -> "TAB"
                     _ -> x
                 , ppTitle = dzenColor lt dk . pad . dzenEscape
                 }
