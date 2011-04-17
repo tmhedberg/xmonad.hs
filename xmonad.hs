@@ -23,7 +23,7 @@ main = xmonad =<< myStatusBar myConfig
         
 myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt" 
                                                        , modMask = mod4Mask
-                                                       , focusedBorderColor = "#0000FF"
+                                                       , focusedBorderColor = "#8f7100"
                                                        , normalBorderColor = "#111111"
                                                        , manageHook = floatNextHook
                                                                   <+> manageDocks
