@@ -54,10 +54,25 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig { terminal = "urxvt"
                                                        , ((mod4Mask, xK_d), toggleFloatAllNew)
                                                        ]
 
-myStatusBar conf = statusBar ("dzen2 " ++ flags) dzenPP toggleStrutsKey conf
+myStatusBar conf = statusBar ("dzen2 " ++ flags) dzenPP' toggleStrutsKey conf
         where fg = "'#a8a3f7'"  -- Default: #a8a3f7
               bg = "'#101f3e'"  -- Default: #3f3c6d
               flags = "-e 'onstart=lower' -w 1055 -ta l -fg " ++ fg ++ " -bg " ++ bg ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
+              dzenPP' = defaultPP
+                { ppCurrent = dzenColor "white" "#2b4f98" . pad
+                , ppVisible = dzenColor "black" "#999999" . pad
+                , ppHidden = dzenColor "black" "#cccccc" . pad
+                , ppHiddenNoWindows = const ""
+                , ppUrgent = dzenColor "red" "yellow" . dzenStrip
+                , ppWsSep = ""
+                , ppSep = ""
+                , ppLayout = dzenColor "black" "#cccccc" . \x -> pad $ case x of
+                    "TilePrime Horizontal" -> "TTT"
+                    "TilePrime Vertical" -> "[]="
+                    "Hinted Full" -> "[ ]"
+                    _ -> x
+                , ppTitle = ("^bg(#324c80) " ++) . dzenEscape
+                }
 
 toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b)
