@@ -1,4 +1,3 @@
-import Data.Char
 import XMonad
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.DynamicLog
@@ -6,18 +5,13 @@ import XMonad.Hooks.FloatNext
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
-import XMonad.Layout
-import XMonad.Layout.Decoration
-import XMonad.Layout.Grid
 import XMonad.Layout.Maximize
 import XMonad.Layout.Minimize
 import XMonad.Layout.NoBorders
-import XMonad.Layout.SimpleFloat
-import XMonad.Layout.TabBarDecoration
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
-import XMonad.StackSet (focusDown)
-import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.StackSet
+import XMonad.Util.EZConfig
 
 -- Shell commands
 cmd_browser = "firefox || ([ $? -eq 127 ] && chromium)"
