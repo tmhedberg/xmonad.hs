@@ -48,7 +48,7 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig
                <+> manageDocks
                <+> (isFullscreen --> doFullFloat)
                <+> composeAll
-                [className =? c --> doF focusDown | c <- noStealFocusWins]
+                    [className =? c --> doF focusDown | c <- noStealFocusWins]
                <+> manageHook defaultConfig
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
