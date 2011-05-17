@@ -19,6 +19,7 @@ cmd_lockScreen = "slock"
 cmd_volDown = "amixer set Master 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
+cmd_touchpadToggle = "touchtoggle"
 
 -- Key codes
 keyCode_volDown = 0x1008ff11
@@ -81,6 +82,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
          , ((my_modKey, xK_f), toggleFloatNext)
          , ((my_modKey, xK_d), toggleFloatAllNew)
+         , ((my_modKey, xK_F12), spawn cmd_touchpadToggle)
          ]
 
 -- Status bar configuration
