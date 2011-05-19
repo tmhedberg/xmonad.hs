@@ -10,7 +10,7 @@ import XMonad.Layout.Minimize
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
-import XMonad.StackSet
+import XMonad.StackSet hiding (workspaces)
 import XMonad.Util.EZConfig
 
 -- Shell commands
@@ -35,6 +35,9 @@ colorDef_midGray = "#111111"
 color_focusedBorder = colorDef_darkAmber
 color_normalBorder = colorDef_midGray
 
+-- Additional workspaces & associated hotkeys
+addWorkspaces = []
+
 -- Misc constants
 my_terminal = "urxvt"
 my_modKey = mod4Mask
@@ -53,6 +56,7 @@ myConfig = withUrgencyHook NoUrgencyHook defaultConfig
                <+> manageHook defaultConfig
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
+    , workspaces = map show [1 .. 9 :: Int] ++ map fst addWorkspaces
     } `additionalKeys` myKeys
 
 -- Custom key bindings
@@ -83,7 +87,10 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_f), toggleFloatNext)
          , ((my_modKey, xK_d), toggleFloatAllNew)
          , ((my_modKey, xK_F12), spawn cmd_touchpadToggle)
-         ]
+         ] ++
+         [((my_modKey .|. m, k), windows $ f ws)
+            | (m, f) <- [(0, greedyView), (shiftMask, shift)]
+            , (ws, k) <- addWorkspaces]
 
 -- Status bar configuration
 myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
