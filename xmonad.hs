@@ -36,7 +36,7 @@ color_focusedBorder = colorDef_darkAmber
 color_normalBorder = colorDef_midGray
 
 -- Additional workspaces & associated hotkeys
-addWorkspaces = []
+addWorkspaces = [("0", xK_0)]
 
 -- Misc constants
 my_terminal = "urxvt"
