@@ -38,6 +38,9 @@ color_normalBorder = colorDef_midGray
 -- Additional workspaces & associated hotkeys
 addWorkspaces = [("0", xK_0)]
 
+-- List of X11 window classes which should never steal focus
+noStealFocusWins = ["Pidgin"]
+
 -- Misc constants
 my_terminal = "urxvt"
 my_modKey = mod4Mask
@@ -122,8 +125,5 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
 -- Workspace layouts
 myLayouts = (maximize $ minimize $ Tall 1 (3/100) (1/2)) 
         ||| simpleTabbed 
-
--- List of X11 window classes which should never steal focus
-noStealFocusWins = ["Pidgin"]
 
 main = xmonad =<< myStatusBar myConfig
