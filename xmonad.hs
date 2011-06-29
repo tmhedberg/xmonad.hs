@@ -27,12 +27,12 @@ keyCode_volUp = 0x1008ff13
 keyCode_volMute = 0x1008ff12
 
 -- Color definitions
-colorDef_amber = "#dcae00"
-colorDef_darkAmber = "#8f7100"
+colorDef_white = "#ffffff"
+colorDef_darkGray = "#888888"
 colorDef_midGray = "#111111"
 
 -- Color assignments
-color_focusedBorder = colorDef_darkAmber
+color_focusedBorder = colorDef_darkGray
 color_normalBorder = colorDef_midGray
 
 -- Additional workspaces & associated hotkeys
@@ -104,8 +104,8 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                ++ " -bg "
                ++ bg
                ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
-          dzenPP' = let lt = colorDef_amber
-                        md = colorDef_darkAmber
+          dzenPP' = let lt = colorDef_white
+                        md = colorDef_darkGray
                         dk = "black"
                     in defaultPP
                         { ppCurrent = dzenColor dk lt . pad
