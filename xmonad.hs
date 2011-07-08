@@ -20,11 +20,13 @@ cmd_volDown = "amixer set Master 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
 cmd_touchpadToggle = "touchtoggle"
+cmd_lockSuspend = cmd_lockScreen ++ " & sleep 3 && sudo pm-suspend"
 
 -- Key codes
 keyCode_volDown = 0x1008ff11
 keyCode_volUp = 0x1008ff13
 keyCode_volMute = 0x1008ff12
+keyCode_suspend = 0x1008ffa7
 
 -- Color definitions
 colorDef_white = "#ffffff"
@@ -67,6 +69,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((0, keyCode_volDown), spawn cmd_volDown)
          , ((0, keyCode_volUp), spawn cmd_volUp)
          , ((0, keyCode_volMute), spawn cmd_volMute)
+         , ((0, keyCode_suspend), spawn cmd_lockSuspend)
          , ((my_modKey, xK_i), withFocused $ sendMessage . MinimizeWin)
          , ( (my_modKey .|. shiftMask, xK_i)
            , sendMessage RestoreNextMinimizedWin
