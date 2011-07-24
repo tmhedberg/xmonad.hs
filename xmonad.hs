@@ -48,7 +48,7 @@ my_terminal = "urxvt"
 my_modKey = mod4Mask
 
 -- General configuration
-myConfig = withUrgencyHook NoUrgencyHook defaultConfig 
+myConfig = withUrgencyHook NoUrgencyHook defaultConfig
     { terminal = my_terminal
     , modMask = my_modKey
     , focusedBorderColor = color_focusedBorder
@@ -127,6 +127,6 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
 
 -- Workspace layouts
 myLayouts = (maximize $ Tall 1 (3/100) (1/2))
-        ||| simpleTabbed 
+        ||| simpleTabbed
 
 main = xmonad =<< myStatusBar myConfig
