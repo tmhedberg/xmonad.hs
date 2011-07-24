@@ -119,14 +119,14 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                         , ppWsSep = ""
                         , ppSep = ""
                         , ppLayout = dzenColor dk md . \x -> pad $ case x of
-                            "Maximize Minimize Tall" -> "MMT"
+                            "Maximize Tall" -> "MXT"
                             "Tabbed Simplest" -> "TAB"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
                         }
 
 -- Workspace layouts
-myLayouts = (maximize $ minimize $ Tall 1 (3/100) (1/2)) 
+myLayouts = (maximize $ Tall 1 (3/100) (1/2))
         ||| simpleTabbed 
 
 main = xmonad =<< myStatusBar myConfig
