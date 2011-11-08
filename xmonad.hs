@@ -1,3 +1,5 @@
+import Control.Applicative ((<*>), pure)
+
 import XMonad
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.DynamicLog
@@ -123,10 +125,9 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                             "Tabbed Simplest" -> "TAB"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
-                        , ppExtras = let format = dzenColor dk md . pad
-                                     in [ willFloatNextPP format
-                                        , willFloatAllNewPP format
-                                        ]
+                        , ppExtras = [ willFloatNextPP
+                                     , willFloatAllNewPP
+                                     ] <*> pure (dzenColor dk md . pad)
                         }
 
 -- Workspace layouts
