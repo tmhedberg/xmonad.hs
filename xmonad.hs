@@ -90,8 +90,8 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey .|. shiftMask, xK_Right), sendMessage $ Swap R)
          , ((my_modKey, xK_g), goToSelected defaultGSConfig)
          , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
-         , ((my_modKey, xK_f), toggleFloatNext)
-         , ((my_modKey, xK_d), toggleFloatAllNew)
+         , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
+         , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
          , ((my_modKey, xK_F12), spawn cmd_touchpadToggle)
          ] ++
          [((my_modKey .|. m, k), windows $ f ws)
@@ -123,6 +123,10 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                             "Tabbed Simplest" -> "TAB"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
+                        , ppExtras = let format = dzenColor dk md . pad
+                                     in [ willFloatNextPP format
+                                        , willFloatAllNewPP format
+                                        ]
                         }
 
 -- Workspace layouts
