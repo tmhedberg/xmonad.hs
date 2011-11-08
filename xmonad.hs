@@ -127,7 +127,12 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
                         , ppExtras = [ willFloatNextPP
                                      , willFloatAllNewPP
-                                     ] <*> pure (dzenColor dk md . pad)
+                                     ] <*> pure 
+                                         ( dzenColor dk md
+                                         . pad
+                                         . \s -> case s of "All" -> "*"
+                                                           "Next" -> "+"
+                                         )
                         }
 
 -- Workspace layouts
