@@ -8,7 +8,6 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Maximize
-import XMonad.Layout.Minimize
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
@@ -72,13 +71,6 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((0, keyCode_volUp), spawn cmd_volUp)
          , ((0, keyCode_volMute), spawn cmd_volMute)
          , ((0, keyCode_suspend), spawn cmd_lockSuspend)
-         , ((my_modKey, xK_i), withFocused $ sendMessage . MinimizeWin)
-         , ( (my_modKey .|. shiftMask, xK_i)
-           , sendMessage RestoreNextMinimizedWin
-           )
-         , ( (my_modKey .|. controlMask, xK_i)
-           , withFocused $ sendMessage . RestoreMinimizedWin
-           )
          , ( (my_modKey, xK_backslash)
            , withFocused (sendMessage . maximizeRestore)
            )
