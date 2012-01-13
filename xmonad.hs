@@ -15,7 +15,7 @@ import XMonad.StackSet hiding (workspaces)
 import XMonad.Util.EZConfig
 
 -- Shell commands
-cmd_browser = "firefox || ([ $? -eq 127 ] && chromium)"
+cmd_browser = "exec firefox || ([ $? -eq 127 ] && exec chromium)"
 cmd_lockScreen = "slock"
 cmd_volDown = "amixer set Master 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute"
