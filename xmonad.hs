@@ -9,6 +9,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Maximize
 import XMonad.Layout.NoBorders
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
 import XMonad.StackSet hiding (workspaces)
@@ -87,6 +88,8 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
          , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
          , ((my_modKey, xK_F12), spawn cmd_touchpadToggle)
+         , ((my_modKey, xK_a), sendMessage MirrorExpand)
+         , ((my_modKey, xK_z), sendMessage MirrorShrink)
          ] ++
          [((my_modKey .|. m, k), windows $ f ws)
             | (m, f) <- [(0, greedyView), (shiftMask, shift)]
@@ -113,7 +116,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                         , ppWsSep = ""
                         , ppSep = ""
                         , ppLayout = dzenColor dk md . \x -> pad $ case x of
-                            "Maximize Tall" -> "MXT"
+                            "Maximize ResizableTall" -> "MRT"
                             "Tabbed Simplest" -> "TAB"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
@@ -128,7 +131,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                         }
 
 -- Workspace layouts
-myLayouts = (maximize $ Tall 1 (3/100) (1/2))
+myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| simpleTabbed
 
 main = xmonad =<< myStatusBar myConfig
