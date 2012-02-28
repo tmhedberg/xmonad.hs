@@ -1,5 +1,7 @@
 import Control.Applicative ((<*>), pure)
 
+import System.Exit (exitSuccess)
+
 import XMonad
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.DynamicLog
@@ -90,6 +92,8 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_F12), spawn cmd_touchpadToggle)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
+         , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
+         , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
          ] ++
          [((my_modKey .|. m, k), windows $ f ws)
             | (m, f) <- [(0, greedyView), (shiftMask, shift)]
