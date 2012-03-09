@@ -106,7 +106,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
 myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
     where fg = "white"  -- Default: #a8a3f7
           bg = "black"  -- Default: #3f3c6d
-          flags = "-e 'onstart=lower' -w 1055 -ta l -fg "
+          flags = "-e 'onstart=lower' -w 1215 -ta l -fg "
                ++ fg
                ++ " -bg "
                ++ bg
