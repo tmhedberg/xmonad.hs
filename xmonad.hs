@@ -31,6 +31,7 @@ cmd_toggleMonitor = "monitorctl toggle"
 keyCode_volDown = 0x1008ff11
 keyCode_volUp = 0x1008ff13
 keyCode_volMute = 0x1008ff12
+keyCode_suspend = 0x1008ff2f
 keyCode_extDisplay = 0x1008ff59
 
 -- Color definitions
@@ -74,7 +75,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((0, keyCode_volDown), spawn cmd_volDown)
          , ((0, keyCode_volUp), spawn cmd_volUp)
          , ((0, keyCode_volMute), spawn cmd_volMute)
-         , ((my_modKey .|. shiftMask, xK_F4), spawn cmd_lockSuspend)
+         , ((0, keyCode_suspend), spawn cmd_lockSuspend)
          , ((0, keyCode_extDisplay), spawn cmd_toggleMonitor)
          , ( (my_modKey, xK_backslash)
            , withFocused (sendMessage . maximizeRestore)
