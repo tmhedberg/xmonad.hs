@@ -20,8 +20,8 @@ import XMonad.Util.EZConfig
 -- Shell commands
 cmd_browser = "exec firefox || ([ $? -eq 127 ] && exec chromium)"
 cmd_lockScreen = "slock"
-cmd_volDown = "amixer set Master 1- unmute"
-cmd_volUp = "amixer set Master 1+ unmute"
+cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
+cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
 cmd_touchpadToggle = "touchtoggle"
 cmd_lockSuspend = cmd_lockScreen ++ " & sleep 3 && sudo pm-suspend"
