@@ -12,6 +12,7 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Maximize
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
 import XMonad.StackSet hiding (workspaces)
@@ -125,6 +126,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                         , ppLayout = dzenColor dk md . \x -> pad $ case x of
                             "Maximize ResizableTall" -> "MRT"
                             "Tabbed Simplest" -> "TAB"
+                            "SimplestFloat" -> "FLT"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
                         , ppExtras = [ willFloatNextPP
@@ -140,5 +142,6 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
 -- Workspace layouts
 myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| simpleTabbed
+        ||| simplestFloat
 
 main = xmonad =<< myStatusBar myConfig
