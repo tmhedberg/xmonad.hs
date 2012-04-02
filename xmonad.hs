@@ -26,6 +26,7 @@ cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
 cmd_touchpadToggle = "touchtoggle"
 cmd_lockSuspend = cmd_lockScreen ++ " & sleep 3 && sudo pm-suspend"
+cmd_lockHibernate = cmd_lockScreen ++ "& sleep 3 && sudo pm-hibernate"
 cmd_toggleMonitor = "monitorctl toggle"
 
 -- Key codes
@@ -77,6 +78,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((0, keyCode_volUp), spawn cmd_volUp)
          , ((0, keyCode_volMute), spawn cmd_volMute)
          , ((0, keyCode_suspend), spawn cmd_lockSuspend)
+         , ((my_modKey .|. shiftMask, xK_F4), spawn cmd_lockHibernate)
          , ((0, keyCode_extDisplay), spawn cmd_toggleMonitor)
          , ( (my_modKey, xK_backslash)
            , withFocused (sendMessage . maximizeRestore)
