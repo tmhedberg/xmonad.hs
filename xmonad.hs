@@ -14,6 +14,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.WindowNavigation
 import XMonad.StackSet hiding (workspaces)
 import XMonad.Util.EZConfig
@@ -127,6 +128,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                             "Maximize ResizableTall" -> "MRT"
                             "Tabbed Simplest" -> "TAB"
                             "SimplestFloat" -> "FLT"
+                            "ThreeCol" -> "3CL"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
                         , ppExtras = [ willFloatNextPP
@@ -143,5 +145,6 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
 myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| simpleTabbed
         ||| simplestFloat
+        ||| ThreeCol 1 (3 / 100) (1 / 2)
 
 main = xmonad =<< myStatusBar myConfig
