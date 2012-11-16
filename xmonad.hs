@@ -26,7 +26,7 @@ cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
 cmd_touchpadToggle = "touchtoggle"
-cmd_lockHibernate = cmd_lockScreen ++ "& sleep 3 && systemctl hibernate"
+cmd_lockHibernate = cmd_lockScreen ++ "& sleep 1 && systemctl hibernate"
 cmd_toggleMonitor = "monitorctl toggle"
 
 -- Key codes
