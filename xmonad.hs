@@ -46,7 +46,8 @@ color_focusedBorder = colorDef_darkGray
 color_normalBorder = colorDef_midGray
 
 -- Additional workspaces & associated hotkeys
-addWorkspaces = [("0", xK_0)]
+addWorkspaces = [("0", xK_0)] ++ map fKeyWorkspace [1..12]
+    where fKeyWorkspace n = ('F' : show n, xK_F1 + (n - 1))
 
 -- List of X11 window classes which should never steal focus
 noStealFocusWins = ["Pidgin"]
