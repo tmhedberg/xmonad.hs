@@ -26,7 +26,6 @@ cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
 cmd_touchpadToggle = "touchtoggle"
-cmd_lockHibernate = cmd_lockScreen ++ "& sleep 1 && systemctl hibernate"
 cmd_toggleMonitor = "monitorctl toggle"
 
 -- Key codes
@@ -78,7 +77,6 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((0, keyCode_volDown), spawn cmd_volDown)
          , ((0, keyCode_volUp), spawn cmd_volUp)
          , ((0, keyCode_volMute), spawn cmd_volMute)
-         , ((my_modKey .|. shiftMask, xK_F4), spawn cmd_lockHibernate)
          , ((0, keyCode_extDisplay), spawn cmd_toggleMonitor)
          , ( (my_modKey, xK_backslash)
            , withFocused (sendMessage . maximizeRestore)
@@ -95,7 +93,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
          , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
          , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
-         , ((my_modKey, xK_F12), spawn cmd_touchpadToggle)
+         , ((my_modKey, xK_minus), spawn cmd_touchpadToggle)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
