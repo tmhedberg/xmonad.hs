@@ -4,6 +4,8 @@
 import Control.Applicative ((<*>), pure)
 
 import Data.Functor
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 import System.Exit (exitSuccess)
 
@@ -155,3 +157,8 @@ main = xmonad =<< myStatusBar myConfig
 
 focusedWindow :: X (Maybe Window)
 focusedWindow = (fmap focus) . stack . workspace . current . windowset <$> get
+
+focusedWindowFloatingIndicator :: X (Maybe String)
+focusedWindowFloatingIndicator = do xstate <- get
+                                    let indicateFloating win = if win `S.member` M.keysSet (floating $ windowset xstate) then Just "^" else Nothing
+                                    maybe Nothing indicateFloating <$> focusedWindow
