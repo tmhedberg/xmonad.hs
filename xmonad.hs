@@ -137,14 +137,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                             "ThreeCol" -> "3CL"
                             _ -> x
                         , ppTitle = dzenColor lt dk . pad . dzenEscape
-                        , ppExtras = [ willFloatNextPP
-                                     , willFloatAllNewPP
-                                     ] <*> pure
-                                         ( dzenColor dk md
-                                         . pad
-                                         . \s -> case s of "All" -> "*"
-                                                           "Next" -> "+"
-                                         )
+                        , ppExtras = (fmap (dzenColor dk md . pad . dzenEscape) <$> focusedWindowFloatingIndicator) : ([willFloatNextPP, willFloatAllNewPP] <*> pure (dzenColor dk md . pad . \s -> case s of "All" -> "*"; "Next" -> "+"))
                         }
 
 -- Workspace layouts
