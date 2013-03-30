@@ -1,3 +1,6 @@
+{-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-type-defaults #-}
+{-# OPTIONS_GHC -fno-warn-unused-binds #-}
+
 import Control.Applicative ((<*>), pure)
 
 import System.Exit (exitSuccess)
