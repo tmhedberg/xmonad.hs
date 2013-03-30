@@ -3,9 +3,11 @@
 
 import Control.Applicative ((<*>), pure)
 
+import Data.Functor
+
 import System.Exit (exitSuccess)
 
-import XMonad
+import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FloatNext
@@ -150,3 +152,6 @@ myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| ThreeCol 1 (3 / 100) (1 / 2)
 
 main = xmonad =<< myStatusBar myConfig
+
+focusedWindow :: X (Maybe Window)
+focusedWindow = (fmap focus) . stack . workspace . current . windowset <$> get
