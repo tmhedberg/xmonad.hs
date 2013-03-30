@@ -1,8 +1,15 @@
+{-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-type-defaults #-}
+{-# OPTIONS_GHC -fno-warn-unused-binds #-}
+
 import Control.Applicative ((<*>), pure)
+
+import Data.Functor
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 import System.Exit (exitSuccess)
 
-import XMonad
+import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FloatNext
@@ -105,40 +112,44 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
 
 -- Status bar configuration
 myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
-    where fg = "white"  -- Default: #a8a3f7
-          bg = "black"  -- Default: #3f3c6d
-          flags = "-e 'onstart=lower' -w 1215 -ta l -fg "
-               ++ fg
-               ++ " -bg "
-               ++ bg
-               ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
-          dzenPP' = let lt = colorDef_white
-                        md = colorDef_darkGray
-                        dk = "black"
-                    in defaultPP
-                        { ppCurrent = dzenColor dk lt . pad
-                        , ppVisible = dzenColor dk md . pad
-                        , ppHidden = dzenColor lt dk . pad
-                        , ppHiddenNoWindows = const ""
-                        , ppUrgent = dzenColor "blue" "red" . pad
-                        , ppWsSep = ""
-                        , ppSep = ""
-                        , ppLayout = dzenColor dk md . \x -> pad $ case x of
-                            "Maximize ResizableTall" -> "MRT"
-                            "Tabbed Simplest" -> "TAB"
-                            "SimplestFloat" -> "FLT"
-                            "ThreeCol" -> "3CL"
-                            _ -> x
-                        , ppTitle = dzenColor lt dk . pad . dzenEscape
-                        , ppExtras = [ willFloatNextPP
-                                     , willFloatAllNewPP
-                                     ] <*> pure
-                                         ( dzenColor dk md
-                                         . pad
-                                         . \s -> case s of "All" -> "*"
-                                                           "Next" -> "+"
-                                         )
-                        }
+  where
+    fg = "white"  -- Default: #a8a3f7
+    bg = "black"  -- Default: #3f3c6d
+    flags = "-e 'onstart=lower' -w 1215 -ta l -fg "
+         ++ fg
+         ++ " -bg "
+         ++ bg
+         ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
+    dzenPP' =
+      let lt = colorDef_white
+          md = colorDef_darkGray
+          dk = "black"
+      in
+        defaultPP
+          { ppCurrent = dzenColor dk lt . pad
+          , ppVisible = dzenColor dk md . pad
+          , ppHidden = dzenColor lt dk . pad
+          , ppHiddenNoWindows = const ""
+          , ppUrgent = dzenColor "blue" "red" . pad
+          , ppWsSep = ""
+          , ppSep = ""
+          , ppLayout = dzenColor dk md . \x -> pad $ case x of
+              "Maximize ResizableTall" -> "MRT"
+              "Tabbed Simplest" -> "TAB"
+              "SimplestFloat" -> "FLT"
+              "ThreeCol" -> "3CL"
+              _ -> x
+          , ppTitle = dzenColor lt dk . pad . dzenEscape
+          , ppExtras =
+              (fmap (dzenColor dk md . pad . dzenEscape)
+                <$> focusedWindowFloatingIndicator)
+                : ([willFloatNextPP, willFloatAllNewPP]
+                    <*> pure
+                          (dzenColor dk md
+                            . pad
+                            . \s -> case s of "All" -> "*"
+                                              "Next" -> "+"))
+          }
 
 -- Workspace layouts
 myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
@@ -147,3 +158,16 @@ myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| ThreeCol 1 (3 / 100) (1 / 2)
 
 main = xmonad =<< myStatusBar myConfig
+
+focusedWindow :: X (Maybe Window)
+focusedWindow = (fmap focus) . stack . workspace . current . windowset <$> get
+
+focusedWindowFloatingIndicator :: X (Maybe String)
+focusedWindowFloatingIndicator = do
+  xstate <- get
+  let
+    indicateFloating win =
+      if win `S.member` M.keysSet (floating $ windowset xstate)
+        then Just "^"
+        else Nothing
+  maybe Nothing indicateFloating <$> focusedWindow
