@@ -166,8 +166,7 @@ focusedWindowFloatingIndicator :: X (Maybe String)
 focusedWindowFloatingIndicator = do
   xstate <- get
   let
-    indicateFloating win =
-      if win `S.member` M.keysSet (floating $ windowset xstate)
-        then Just "^"
-        else Nothing
+    indicateFloating win
+      | win `S.member` M.keysSet (floating $ windowset xstate) = Just "^"
+      | otherwise = Nothing
   maybe Nothing indicateFloating <$> focusedWindow
