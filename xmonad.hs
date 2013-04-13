@@ -96,7 +96,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey .|. shiftMask, xK_Down), sendMessage $ Swap D)
          , ((my_modKey .|. shiftMask, xK_Left), sendMessage $ Swap L)
          , ((my_modKey .|. shiftMask, xK_Right), sendMessage $ Swap R)
-         , ((my_modKey, xK_g), goToSelected defaultGSConfig)
+         , ((my_modKey, xK_g), goToSelected myGridSelectConfig)
          , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
          , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
          , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
@@ -156,6 +156,27 @@ myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| simpleTabbed
         ||| simplestFloat
         ||| ThreeCol 1 (3 / 100) (1 / 2)
+
+-- GridSelect configuration
+myGridSelectConfig :: HasColorizer a => GSConfig a
+myGridSelectConfig = defaultGSConfig {gs_navigate = myNavigation}
+  where
+    myNavigation = makeXEventhandler $ shadowWithKeymap navKeymap $
+      const defaultNavigation
+    navKeymap =
+      M.fromList [ ((0, xK_Escape), cancel)
+                 , ((0, xK_Return), select)
+                 , ((0, xK_slash), substringSearch myNavigation)
+                 , ((0, xK_h), move (-1, 0) >> myNavigation)
+                 , ((0, xK_l), move (1, 0) >> myNavigation)
+                 , ((0, xK_j), move (0, 1) >> myNavigation)
+                 , ((0, xK_k), move (0, -1) >> myNavigation)
+                 , ((0, xK_y), move (-1, -1) >> myNavigation)
+                 , ((0, xK_u), move (1, -1) >> myNavigation)
+                 , ((0, xK_b), move (-1, 1) >> myNavigation)
+                 , ((0, xK_n), move (1, 1) >> myNavigation)
+                 , ((0, xK_Tab), moveNext >> myNavigation)
+                 ]
 
 main = xmonad =<< myStatusBar myConfig
 
