@@ -28,7 +28,7 @@ import XMonad.Util.EZConfig
 
 -- Shell commands
 cmd_browser = "exec firefox || ([ $? -eq 127 ] && exec chromium)"
-cmd_lockScreen = "slock"
+cmd_lockScreen = "slock -d 3600 1200" -- Width of 2 external monitors put together; height of largest monitor
 cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
