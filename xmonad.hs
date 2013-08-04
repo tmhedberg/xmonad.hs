@@ -12,6 +12,7 @@ import System.Exit (exitSuccess)
 import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FloatNext
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -63,7 +64,7 @@ my_terminal = "urxvt"
 my_modKey = mod4Mask
 
 -- General configuration
-myConfig = withUrgencyHook NoUrgencyHook defaultConfig
+myConfig = ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
     { terminal = my_terminal
     , modMask = my_modKey
     , focusedBorderColor = color_focusedBorder
