@@ -28,20 +28,17 @@ import XMonad.StackSet hiding (workspaces)
 import XMonad.Util.EZConfig
 
 -- Shell commands
-cmd_browser = "exec firefox || ([ $? -eq 127 ] && exec chromium)"
-cmd_lockScreen = "slock -d 3600 1200" -- Width of 2 external monitors put together; height of largest monitor
+cmd_browser = "exec google-chrome"
+cmd_lockScreen = "slock"
 cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
-cmd_touchpadToggle = "touchtoggle"
-cmd_toggleMonitor = "monitorctl toggle"
 
 -- Key codes
 keyCode_volDown = 0x1008ff11
 keyCode_volUp = 0x1008ff13
 keyCode_volMute = 0x1008ff12
 keyCode_suspend = 0x1008ff2f
-keyCode_extDisplay = 0x1008ff59
 
 -- Color definitions
 colorDef_white = "#ffffff"
@@ -57,10 +54,10 @@ addWorkspaces = [("0", xK_0)] ++ map fKeyWorkspace [1..12]
     where fKeyWorkspace n = ('F' : show n, xK_F1 + (n - 1))
 
 -- List of X11 window classes which should never steal focus
-noStealFocusWins = ["Pidgin"]
+noStealFocusWins = []
 
 -- Misc constants
-my_terminal = "urxvt"
+my_terminal = "gnome-terminal"
 my_modKey = mod4Mask
 
 -- General configuration
@@ -85,7 +82,6 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((0, keyCode_volDown), spawn cmd_volDown)
          , ((0, keyCode_volUp), spawn cmd_volUp)
          , ((0, keyCode_volMute), spawn cmd_volMute)
-         , ((0, keyCode_extDisplay), spawn cmd_toggleMonitor)
          , ( (my_modKey, xK_backslash)
            , withFocused (sendMessage . maximizeRestore)
            )
@@ -101,7 +97,6 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
          , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
          , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
-         , ((my_modKey, xK_minus), spawn cmd_touchpadToggle)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
@@ -116,11 +111,11 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
   where
     fg = "white"  -- Default: #a8a3f7
     bg = "black"  -- Default: #3f3c6d
-    flags = "-e 'onstart=lower' -w 1215 -ta l -fg "
+    flags = "-e 'onstart=lower' -ta l -fg "
          ++ fg
          ++ " -bg "
          ++ bg
-         ++ " -fn '-*-profont-*-*-*-*-11-*-*-*-*-*-*-*'"
+         ++ " -fn 'DejaVu Sans Mono:pixelsize=10"
     dzenPP' =
       let lt = colorDef_white
           md = colorDef_darkGray
