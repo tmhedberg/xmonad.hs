@@ -19,6 +19,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Maximize
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Reflect
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
@@ -131,6 +132,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
           , ppSep = ""
           , ppLayout = dzenColor dk md . \x -> pad $ case x of
               "Maximize ResizableTall" -> "MRT"
+              "ReflectX Maximize ResizableTall" -> "TRM"
               "Tabbed Simplest" -> "TAB"
               "SimplestFloat" -> "FLT"
               "ThreeCol" -> "3CL"
@@ -149,6 +151,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
 
 -- Workspace layouts
 myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
+        ||| reflectHoriz (maximize (ResizableTall 1 (3 / 100) (1 / 2) []))
         ||| simpleTabbed
         ||| simplestFloat
         ||| ThreeCol 1 (3 / 100) (1 / 2)
