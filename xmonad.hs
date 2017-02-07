@@ -25,8 +25,10 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.WindowNavigation
+import XMonad.ManageHook
 import XMonad.StackSet hiding (workspaces)
 import XMonad.Util.EZConfig
+import XMonad.Util.NamedScratchpad
 
 -- Shell commands
 cmd_browser = "exec google-chrome"
@@ -61,6 +63,13 @@ noStealFocusWins = []
 my_terminal = "urxvt"
 my_modKey = mod4Mask
 
+-- Scratchpads
+scratchpads = [ NS "Scratch"
+                   "urxvt -title Scratch"
+                   (title =? "Scratch")
+                   defaultFloating
+              ]
+
 -- General configuration
 myConfig = ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
     { terminal = my_terminal
@@ -72,6 +81,7 @@ myConfig = ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
                <+> (isFullscreen --> doFullFloat)
                <+> composeAll
                     [className =? c --> doF focusDown | c <- noStealFocusWins]
+               <+> namedScratchpadManageHook scratchpads
                <+> manageHook defaultConfig
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
@@ -100,6 +110,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
+         , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
          ] ++
@@ -122,7 +133,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
           md = colorDef_darkGray
           dk = "black"
       in
-        defaultPP
+        namedScratchpadFilterOutWorkspacePP $ defaultPP
           { ppCurrent = dzenColor dk lt . pad
           , ppVisible = dzenColor dk md . pad
           , ppHidden = dzenColor lt dk . pad
