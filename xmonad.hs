@@ -1,7 +1,10 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-type-defaults #-}
 {-# OPTIONS_GHC -fno-warn-unused-binds #-}
 
 import Control.Applicative ((<*>), pure)
+import Control.Monad
 
 import Data.Functor
 import qualified Data.Map as M
@@ -11,12 +14,14 @@ import System.Exit (exitSuccess)
 
 import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
+import XMonad.Actions.WorkspaceNames
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FloatNext
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
+import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Maximize
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Reflect
@@ -26,9 +31,11 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.WindowNavigation
 import XMonad.ManageHook
+import XMonad.Prompt
 import XMonad.StackSet hiding (workspaces)
 import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.Run
 
 -- Shell commands
 cmd_browser = "exec google-chrome"
@@ -111,6 +118,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
          , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
+         , ((my_modKey, xK_a), renameWorkspace defaultXPConfig)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
          ] ++
@@ -118,8 +126,31 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
             | (m, f) <- [(0, greedyView), (shiftMask, shift)]
             , (ws, k) <- addWorkspaces]
 
+-- statusBar implementation copied from XMonad.Hooks.DynamicLog source code,
+-- modified to show workspace names
+statusBar' :: LayoutClass l Window
+           => String    -- ^ the command line to launch the status bar
+           -> PP        -- ^ the pretty printing options
+           -> (XConfig Layout -> (KeyMask, KeySym))
+                        -- ^ the desired key binding to toggle bar visibility
+           -> XConfig l -- ^ the base config
+           -> IO (XConfig (ModifiedLayout AvoidStruts l))
+statusBar' cmd pp k conf = do
+    h <- spawnPipe cmd
+    return $ conf
+        { layoutHook = avoidStruts (layoutHook conf)
+        , logHook = do
+                        logHook conf
+                        pp' <- workspaceNamesPP pp
+                        dynamicLogWithPP pp' { ppOutput = hPutStrLn h }
+        , manageHook = manageHook conf <+> manageDocks
+        , keys       = liftM2 M.union keys' (keys conf)
+        }
+ where
+    keys' = (`M.singleton` sendMessage ToggleStruts) . k
+
 -- Status bar configuration
-myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
+myStatusBar = statusBar' ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
   where
     fg = "white"  -- Default: #a8a3f7
     bg = "black"  -- Default: #3f3c6d
