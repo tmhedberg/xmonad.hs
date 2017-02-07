@@ -57,7 +57,7 @@ addWorkspaces = [("0", xK_0)] ++ map fKeyWorkspace [1..12]
 noStealFocusWins = []
 
 -- Misc constants
-my_terminal = "gnome-terminal"
+my_terminal = "urxvt"
 my_modKey = mod4Mask
 
 -- General configuration
