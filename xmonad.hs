@@ -115,7 +115,7 @@ myStatusBar = statusBar ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
          ++ fg
          ++ " -bg "
          ++ bg
-         ++ " -fn 'DejaVu Sans Mono:pixelsize=10"
+         ++ " -fn 'DejaVu Sans Mono:pixelsize=10'"
     dzenPP' =
       let lt = colorDef_white
           md = colorDef_darkGray
