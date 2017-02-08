@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE DeriveDataTypeable, FlexibleContexts #-}
 
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-type-defaults #-}
 {-# OPTIONS_GHC -fno-warn-unused-binds #-}
@@ -15,6 +15,7 @@ import System.Exit (exitSuccess)
 import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.WorkspaceNames
+import XMonad.Core
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FloatNext
@@ -33,6 +34,7 @@ import XMonad.Layout.WindowNavigation
 import XMonad.ManageHook
 import XMonad.Prompt
 import XMonad.StackSet hiding (workspaces)
+import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
@@ -77,6 +79,10 @@ scratchpads = [ NS "Scratch"
                    defaultFloating
               ]
 
+allWorkspacesKeys :: [(WorkspaceId, KeySym)]
+allWorkspacesKeys = zip (map show [1 .. 9 :: Int] ++ map fst addWorkspaces)
+                        (map (xK_0+) [1 .. 9] ++ map snd addWorkspaces)
+
 -- General configuration
 myConfig = ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
     { terminal = my_terminal
@@ -92,7 +98,7 @@ myConfig = ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
                <+> manageHook defaultConfig
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
-    , workspaces = map show [1 .. 9 :: Int] ++ map fst addWorkspaces
+    , workspaces = map fst allWorkspacesKeys
     } `additionalKeys` myKeys
 
 -- Custom key bindings
@@ -121,10 +127,26 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_a), renameWorkspace defaultXPConfig)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
-         ] ++
-         [((my_modKey .|. m, k), windows $ f ws)
-            | (m, f) <- [(0, greedyView), (shiftMask, shift)]
-            , (ws, k) <- addWorkspaces]
+         ]
+           ++ [((my_modKey, k), toggleWorkspace ws) | (ws, k) <- allWorkspacesKeys]
+           ++ [ ((my_modKey .|. shiftMask, k), windows $ shift ws)
+              | (ws, k) <- allWorkspacesKeys
+              ]
+
+data PreviousWorkspace = PreviousWorkspace WorkspaceId deriving Typeable
+
+instance ExtensionClass PreviousWorkspace where
+  initialValue = PreviousWorkspace "1"
+
+-- | Switch to a workspace, or if it's already selected, switch back to the
+-- previous one
+toggleWorkspace :: WorkspaceId -> X ()
+toggleWorkspace wsid = do
+  PreviousWorkspace prevWSID <- XS.get
+  xstate <- get
+  let curWSID = tag $ workspace $ current $ windowset xstate
+  XS.put $ PreviousWorkspace curWSID
+  windows $ greedyView $ if curWSID == wsid then prevWSID else wsid
 
 -- statusBar implementation copied from XMonad.Hooks.DynamicLog source code,
 -- modified to show workspace names
