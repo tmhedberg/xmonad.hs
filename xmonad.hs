@@ -133,7 +133,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
               | (ws, k) <- allWorkspacesKeys
               ]
 
-data PreviousWorkspace = PreviousWorkspace WorkspaceId deriving Typeable
+newtype PreviousWorkspace = PreviousWorkspace WorkspaceId deriving Typeable
 
 instance ExtensionClass PreviousWorkspace where
   initialValue = PreviousWorkspace "1"
