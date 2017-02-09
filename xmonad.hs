@@ -41,7 +41,7 @@ import XMonad.Util.Run
 
 -- Shell commands
 cmd_browser = "exec google-chrome"
-cmd_lockScreen = "slock"
+cmd_lockScreen = "i3lock -c 000000"
 cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
