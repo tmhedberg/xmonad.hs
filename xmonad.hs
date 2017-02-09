@@ -124,7 +124,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
          , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
-         , ((my_modKey, xK_a), renameWorkspace defaultXPConfig)
+         , ((my_modKey, xK_x), renameWorkspace defaultXPConfig)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
          ]
