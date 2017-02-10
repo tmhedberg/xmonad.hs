@@ -45,6 +45,7 @@ cmd_lockScreen = "i3lock -c 000000"
 cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "amixer set Master toggle"
+cmd_inactiveDim = "compton-dimming"
 
 -- Key codes
 keyCode_volDown = 0x1008ff11
@@ -125,6 +126,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
          , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
          , ((my_modKey, xK_x), renameWorkspace defaultXPConfig)
+         , ((my_modKey, xK_v), spawn cmd_inactiveDim)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
          ]
