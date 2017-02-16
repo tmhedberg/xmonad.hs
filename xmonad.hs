@@ -44,7 +44,7 @@ cmd_browser = "exec google-chrome"
 cmd_lockScreen = "xscreensaver-command -lock"
 cmd_volDown = "amixer set Master 1- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1+ unmute; amixer -c 1 set Speaker 1+ unmute"
-cmd_volMute = "amixer set Master toggle"
+cmd_volMute = "for ctrl in Master Headphone Speaker PCM; do amixer set $ctrl toggle; done"
 cmd_inactiveDim = "compton-dimming"
 
 -- Key codes
