@@ -67,7 +67,9 @@ addWorkspaces = [("0", xK_0)] ++ map fKeyWorkspace [1..12]
     where fKeyWorkspace n = ('F' : show n, xK_F1 + (n - 1))
 
 -- List of X11 window classes which should never steal focus
-noStealFocusWins = []
+noStealFocusWins = [ "crx_hmjkmjkepdijhoojdojkdfohbdgmmhki" -- Google Keep Chrome app
+                   , "crx_knipolnnllmklapflnccelgolnpehhpl" -- Hangouts Chrome app
+                   ]
 
 -- Misc constants
 my_terminal = "urxvt"
