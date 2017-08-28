@@ -180,7 +180,7 @@ myStatusBar = statusBar' ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
   where
     fg = "white"  -- Default: #a8a3f7
     bg = "black"  -- Default: #3f3c6d
-    flags = "-e 'onstart=lower' -w 1695 -ta l -fg "
+    flags = "-e 'onstart=lower' -w 2335 -ta l -fg "
          ++ fg
          ++ " -bg "
          ++ bg
