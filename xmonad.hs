@@ -87,7 +87,7 @@ allWorkspacesKeys = zip (map show [1 .. 9 :: Int] ++ map fst addWorkspaces)
                         (map (xK_0+) [1 .. 9] ++ map snd addWorkspaces)
 
 -- General configuration
-myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
+myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook def
     { terminal = my_terminal
     , modMask = my_modKey
     , focusedBorderColor = color_focusedBorder
@@ -98,7 +98,7 @@ myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook defaultConfig
                <+> composeAll
                     [className =? c --> doF focusDown | c <- noStealFocusWins]
                <+> namedScratchpadManageHook scratchpads
-               <+> manageHook defaultConfig
+               <+> manageHook def
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
     , workspaces = map fst allWorkspacesKeys
@@ -127,7 +127,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
          , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
-         , ((my_modKey, xK_x), renameWorkspace defaultXPConfig)
+         , ((my_modKey, xK_x), renameWorkspace def)
          , ((my_modKey, xK_v), spawn cmd_inactiveDim)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
@@ -190,7 +190,7 @@ myStatusBar = statusBar' ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
           md = colorDef_darkGray
           dk = "black"
       in
-        namedScratchpadFilterOutWorkspacePP $ defaultPP
+        namedScratchpadFilterOutWorkspacePP $ def
           { ppCurrent = dzenColor dk lt . pad
           , ppVisible = dzenColor dk md . pad
           , ppHidden = dzenColor lt dk . pad
@@ -226,7 +226,7 @@ myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
 
 -- GridSelect configuration
 myGridSelectConfig :: HasColorizer a => GSConfig a
-myGridSelectConfig = defaultGSConfig {gs_navigate = myNavigation}
+myGridSelectConfig = def {gs_navigate = myNavigation}
   where
     myNavigation = makeXEventhandler $ shadowWithKeymap navKeymap $
       const defaultNavigation
