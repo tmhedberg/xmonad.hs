@@ -140,14 +140,18 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
               | (ws, k) <- allWorkspacesKeys
               ]
 
-newtype PreviousWorkspace = PreviousWorkspace WorkspaceId deriving Typeable
+newtype PreviousWorkspace = PreviousWorkspace WorkspaceId
+  deriving (Read, Show, Typeable)
 
 instance ExtensionClass PreviousWorkspace where
   initialValue = PreviousWorkspace "1"
+  extensionType = PersistentExtension
 
-newtype PIPWindow = PIPWindow (Maybe Window) deriving Typeable
+newtype PIPWindow = PIPWindow (Maybe Window) deriving (Read, Show, Typeable)
 
-instance ExtensionClass PIPWindow where initialValue = PIPWindow Nothing
+instance ExtensionClass PIPWindow where
+  initialValue = PIPWindow Nothing
+  extensionType = PersistentExtension
 
 -- | Make the focused window become the PIP (picture-in-picture) window
 --
