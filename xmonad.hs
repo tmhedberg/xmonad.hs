@@ -32,6 +32,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.WindowNavigation
 import XMonad.ManageHook
+import qualified XMonad.Operations as Op
 import XMonad.Prompt
 import XMonad.StackSet hiding (workspaces)
 import qualified XMonad.Util.ExtensibleState as XS
@@ -129,6 +130,8 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
          , ((my_modKey, xK_x), renameWorkspace def)
          , ((my_modKey, xK_v), spawn cmd_inactiveDim)
+         , ((my_modKey, xK_i), makePIPWin)
+         , ((my_modKey .|. shiftMask, xK_i), clearPIPWin)
          , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
          , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
          ]
@@ -142,6 +145,21 @@ newtype PreviousWorkspace = PreviousWorkspace WorkspaceId deriving Typeable
 instance ExtensionClass PreviousWorkspace where
   initialValue = PreviousWorkspace "1"
 
+newtype PIPWindow = PIPWindow (Maybe Window) deriving Typeable
+
+instance ExtensionClass PIPWindow where initialValue = PIPWindow Nothing
+
+-- | Make the focused window become the PIP (picture-in-picture) window
+--
+-- This floats the window and makes it follow the current workspace.
+makePIPWin :: X ()
+makePIPWin = withFocused $ \win ->
+  clearPIPWin >> Op.float win >> XS.put (PIPWindow $ Just win)
+
+-- | Clear the PIP window
+clearPIPWin :: X ()
+clearPIPWin = XS.put $ PIPWindow Nothing
+
 -- | Switch to a workspace, or if it's already selected, switch back to the
 -- previous one
 toggleWorkspace :: WorkspaceId -> X ()
@@ -149,8 +167,22 @@ toggleWorkspace wsid = do
   PreviousWorkspace prevWSID <- XS.get
   xstate <- get
   let curWSID = tag $ workspace $ current $ windowset xstate
+      nextWSID = if curWSID == wsid then prevWSID else wsid
+
+  -- Move the PIP window, if one exists and is on the current workspace, to the
+  -- destination workspace
+  PIPWindow mPIPWin <- XS.get
+  let
+    movePIPWin win = windows $ \ss ->
+      maybe
+        ss
+        (\pipWinWSID ->
+          if pipWinWSID == curWSID then shiftWin nextWSID win ss else ss)
+        (findTag win ss)
+  maybe (return ()) movePIPWin mPIPWin
+
   XS.put $ PreviousWorkspace curWSID
-  windows $ greedyView $ if curWSID == wsid then prevWSID else wsid
+  windows $ greedyView nextWSID
 
 -- statusBar implementation copied from XMonad.Hooks.DynamicLog source code,
 -- modified to show workspace names
