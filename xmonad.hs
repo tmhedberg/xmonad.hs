@@ -246,7 +246,8 @@ myStatusBar = statusBar' ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
                           (dzenColor dk md
                             . pad
                             . \s -> case s of "All" -> "*"
-                                              "Next" -> "+"))
+                                              "Next" -> "+"
+                                              _ -> "?"))
           }
 
 -- Workspace layouts
