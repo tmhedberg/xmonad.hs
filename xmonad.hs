@@ -33,7 +33,7 @@ import qualified XMonad.Operations as Op
 import XMonad.StackSet hiding (workspaces)
 import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.EZConfig
-import XMonad.Util.NamedScratchpad
+import qualified XMonad.Util.NamedScratchpad as NS
 import XMonad.Util.Run
 
 -- Shell commands
@@ -73,10 +73,10 @@ my_terminal = "urxvt"
 my_modKey = mod4Mask
 
 -- Scratchpads
-scratchpads = [ NS "Scratch"
-                   "urxvt -title Scratch"
-                   (title =? "Scratch")
-                   defaultFloating
+scratchpads = [ NS.NS "Scratch"
+                      "urxvt -title Scratch"
+                      (title =? "Scratch")
+                      NS.defaultFloating
               ]
 
 allWorkspacesKeys :: [(WorkspaceId, KeySym)]
@@ -94,7 +94,7 @@ myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook def
                <+> (isFullscreen --> doFullFloat)
                <+> composeAll
                     [className =? c --> doF focusDown | c <- noStealFocusWins]
-               <+> namedScratchpadManageHook scratchpads
+               <+> NS.namedScratchpadManageHook scratchpads
                <+> manageHook def
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
@@ -123,7 +123,7 @@ myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
          , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
          , ((my_modKey, xK_a), sendMessage MirrorExpand)
          , ((my_modKey, xK_z), sendMessage MirrorShrink)
-         , ((my_modKey, xK_s), namedScratchpadAction scratchpads "Scratch")
+         , ((my_modKey, xK_s), NS.namedScratchpadAction scratchpads "Scratch")
          , ((my_modKey, xK_x), renameWorkspace def)
          , ((my_modKey, xK_v), spawn cmd_inactiveDim)
          , ((my_modKey, xK_i), makePIPWin)
@@ -222,7 +222,7 @@ myStatusBar = statusBar' ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
           md = colorDef_darkGray
           dk = "black"
       in
-        namedScratchpadFilterOutWorkspacePP $ def
+        NS.namedScratchpadFilterOutWorkspacePP $ def
           { ppCurrent = dzenColor dk lt . pad
           , ppVisible = dzenColor dk md . pad
           , ppHidden = dzenColor lt dk . pad
