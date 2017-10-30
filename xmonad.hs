@@ -6,7 +6,6 @@
 import Control.Applicative ((<*>), pure)
 import Control.Monad
 
-import Data.Functor
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -15,7 +14,6 @@ import System.Exit (exitSuccess)
 import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.WorkspaceNames
-import XMonad.Core
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FloatNext
@@ -31,9 +29,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.WindowNavigation
-import XMonad.ManageHook
 import qualified XMonad.Operations as Op
-import XMonad.Prompt
 import XMonad.StackSet hiding (workspaces)
 import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.EZConfig
