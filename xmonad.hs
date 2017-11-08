@@ -258,8 +258,10 @@ myLayouts = maximize (ResizableTall 1 (3 / 100) (1 / 2) [])
         ||| ThreeCol 1 (3 / 100) (1 / 2)
 
 -- GridSelect configuration
-myGridSelectConfig :: HasColorizer a => GSConfig a
-myGridSelectConfig = def {gs_navigate = myNavigation}
+myGridSelectConfig :: GSConfig Window
+myGridSelectConfig = def { gs_navigate = myNavigation
+                         , gs_colorizer = fromClassName
+                         }
   where
     myNavigation = makeXEventhandler $ shadowWithKeymap navKeymap $
       const defaultNavigation
