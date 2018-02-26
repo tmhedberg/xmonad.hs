@@ -73,15 +73,16 @@ my_terminal = "urxvt"
 my_modKey = mod4Mask
 
 -- Scratchpads
-scratchpads = [ NS.NS "Scratch"
-                      "urxvt -title Scratch"
-                      (title =? "Scratch")
-                      NS.defaultFloating
-              , NS.NS "Notes"
-                      "urxvt -title Notes -e screen -x -p Notes"
-                      (title =? "Notes")
-                      NS.defaultFloating
-              ]
+scratchpads =
+  [ NS.NS "Scratch"
+          "urxvt -title Scratch"
+          (title =? "Scratch")
+          NS.defaultFloating
+  , NS.NS "Notes"
+          "urxvt -title Notes -geometry 123x34 -e screen -x -p Notes"
+          (title =? "Notes")
+          NS.defaultFloating
+  ]
 
 allWorkspacesKeys :: [(WorkspaceId, KeySym)]
 allWorkspacesKeys = zip (map show [1 .. 9 :: Int] ++ map fst addWorkspaces)
@@ -130,7 +131,8 @@ myKeys =
   , ((my_modKey, xK_z), sendMessage MirrorShrink)
   , ((my_modKey, xK_s), NS.namedScratchpadAction scratchpads "Scratch")
   , ( (my_modKey .|. shiftMask, xK_s)
-    , NS.namedScratchpadAction scratchpads "Notes")
+    , NS.namedScratchpadAction scratchpads "Notes"
+    )
   , ((my_modKey, xK_x), renameWorkspace def)
   , ((my_modKey, xK_v), spawn cmd_inactiveDim)
   , ((my_modKey, xK_i), makePIPWin)
