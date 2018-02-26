@@ -77,6 +77,10 @@ scratchpads = [ NS.NS "Scratch"
                       "urxvt -title Scratch"
                       (title =? "Scratch")
                       NS.defaultFloating
+              , NS.NS "Notes"
+                      "urxvt -title Notes -e screen -x -p Notes"
+                      (title =? "Notes")
+                      NS.defaultFloating
               ]
 
 allWorkspacesKeys :: [(WorkspaceId, KeySym)]
@@ -102,39 +106,42 @@ myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook def
     } `additionalKeys` myKeys
 
 -- Custom key bindings
-myKeys = [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
-         , ((0, keyCode_volDown), spawn cmd_volDown)
-         , ((0, keyCode_volUp), spawn cmd_volUp)
-         , ((0, keyCode_volMute), spawn cmd_volMute)
-         , ( (my_modKey, xK_backslash)
-           , withFocused (sendMessage . maximizeRestore)
-           )
-         , ((my_modKey, xK_Up), sendMessage $ Go U)
-         , ((my_modKey, xK_Down), sendMessage $ Go D)
-         , ((my_modKey, xK_Left), sendMessage $ Go L)
-         , ((my_modKey, xK_Right), sendMessage $ Go R)
-         , ((my_modKey .|. shiftMask, xK_Up), sendMessage $ Swap U)
-         , ((my_modKey .|. shiftMask, xK_Down), sendMessage $ Swap D)
-         , ((my_modKey .|. shiftMask, xK_Left), sendMessage $ Swap L)
-         , ((my_modKey .|. shiftMask, xK_Right), sendMessage $ Swap R)
-         , ((my_modKey, xK_g), goToSelected myGridSelectConfig)
-         , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
-         , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
-         , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
-         , ((my_modKey, xK_a), sendMessage MirrorExpand)
-         , ((my_modKey, xK_z), sendMessage MirrorShrink)
-         , ((my_modKey, xK_s), NS.namedScratchpadAction scratchpads "Scratch")
-         , ((my_modKey, xK_x), renameWorkspace def)
-         , ((my_modKey, xK_v), spawn cmd_inactiveDim)
-         , ((my_modKey, xK_i), makePIPWin)
-         , ((my_modKey .|. shiftMask, xK_i), clearPIPWin)
-         , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
-         , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
-         ]
-           ++ [((my_modKey, k), toggleWorkspace ws) | (ws, k) <- allWorkspacesKeys]
-           ++ [ ((my_modKey .|. shiftMask, k), windows $ shift ws)
-              | (ws, k) <- allWorkspacesKeys
-              ]
+myKeys =
+  [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
+  , ((0, keyCode_volDown), spawn cmd_volDown)
+  , ((0, keyCode_volUp), spawn cmd_volUp)
+  , ((0, keyCode_volMute), spawn cmd_volMute)
+  , ( (my_modKey, xK_backslash)
+    , withFocused (sendMessage . maximizeRestore)
+    )
+  , ((my_modKey, xK_Up), sendMessage $ Go U)
+  , ((my_modKey, xK_Down), sendMessage $ Go D)
+  , ((my_modKey, xK_Left), sendMessage $ Go L)
+  , ((my_modKey, xK_Right), sendMessage $ Go R)
+  , ((my_modKey .|. shiftMask, xK_Up), sendMessage $ Swap U)
+  , ((my_modKey .|. shiftMask, xK_Down), sendMessage $ Swap D)
+  , ((my_modKey .|. shiftMask, xK_Left), sendMessage $ Swap L)
+  , ((my_modKey .|. shiftMask, xK_Right), sendMessage $ Swap R)
+  , ((my_modKey, xK_g), goToSelected myGridSelectConfig)
+  , ((my_modKey .|. shiftMask, xK_backslash), spawn cmd_browser)
+  , ((my_modKey, xK_f), toggleFloatNext >> runLogHook)
+  , ((my_modKey, xK_d), toggleFloatAllNew >> runLogHook)
+  , ((my_modKey, xK_a), sendMessage MirrorExpand)
+  , ((my_modKey, xK_z), sendMessage MirrorShrink)
+  , ((my_modKey, xK_s), NS.namedScratchpadAction scratchpads "Scratch")
+  , ( (my_modKey .|. shiftMask, xK_s)
+    , NS.namedScratchpadAction scratchpads "Notes")
+  , ((my_modKey, xK_x), renameWorkspace def)
+  , ((my_modKey, xK_v), spawn cmd_inactiveDim)
+  , ((my_modKey, xK_i), makePIPWin)
+  , ((my_modKey .|. shiftMask, xK_i), clearPIPWin)
+  , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
+  , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
+  ]
+    ++ [((my_modKey, k), toggleWorkspace ws) | (ws, k) <- allWorkspacesKeys]
+    ++ [ ((my_modKey .|. shiftMask, k), windows $ shift ws)
+       | (ws, k) <- allWorkspacesKeys
+       ]
 
 newtype PreviousWorkspace = PreviousWorkspace WorkspaceId
   deriving (Read, Show, Typeable)
