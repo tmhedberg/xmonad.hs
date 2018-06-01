@@ -103,6 +103,7 @@ myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook def
                <+> manageHook def
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
         avoidStruts myLayouts
+    , handleEventHook = fullscreenEventHook
     , workspaces = map fst allWorkspacesKeys
     } `additionalKeys` myKeys
 
