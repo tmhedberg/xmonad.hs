@@ -77,11 +77,11 @@ scratchpads =
   [ NS.NS "Scratch"
           "urxvt -title Scratch"
           (title =? "Scratch")
-          NS.defaultFloating
+          (doFloatAt (1 / 20) (11 / 20))
   , NS.NS "Notes"
           "urxvt -title Notes -geometry 123x34 -e screen -x -p Notes"
           (title =? "Notes")
-          NS.defaultFloating
+          (doFloatAt (1 / 20) (1 / 20))
   ]
 
 allWorkspacesKeys :: [(WorkspaceId, KeySym)]
