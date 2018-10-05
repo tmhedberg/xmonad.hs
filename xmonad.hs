@@ -68,6 +68,9 @@ noStealFocusWins = [ "crx_hmjkmjkepdijhoojdojkdfohbdgmmhki" -- Google Keep Chrom
                    , "crx_knipolnnllmklapflnccelgolnpehhpl" -- Hangouts Chrome app
                    ]
 
+-- List of X11 window classes which should always float
+alwaysFloatWins = []
+
 -- Misc constants
 my_terminal = "urxvt"
 my_modKey = mod4Mask
@@ -99,6 +102,8 @@ myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook def
                <+> (isFullscreen --> doFullFloat)
                <+> composeAll
                     [className =? c --> doF focusDown | c <- noStealFocusWins]
+               <+> composeAll
+                     [className =? c --> doFloat | c <- alwaysFloatWins]
                <+> NS.namedScratchpadManageHook scratchpads
                <+> manageHook def
     , layoutHook = configurableNavigation noNavigateBorders $ smartBorders $
