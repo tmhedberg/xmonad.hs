@@ -6,6 +6,7 @@
 import Control.Applicative ((<*>), pure)
 import Control.Monad
 
+import Data.Char
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -149,7 +150,9 @@ myKeys conf =
 
   -- Custom terminal launch
   , ((my_modKey .|. shiftMask, xK_Return), launchTerminalAutoscreen conf)
-  , ((my_modKey .|. controlMask .|. shiftMask, xK_Return), spawn $ terminal conf)
+  , ( (my_modKey .|. controlMask .|. shiftMask, xK_Return)
+    , spawn $ terminal conf
+    )
   ]
     ++ [((my_modKey, k), toggleWorkspace ws) | (ws, k) <- allWorkspacesKeys]
     ++ [ ((my_modKey .|. shiftMask, k), windows $ shift ws)
@@ -164,8 +167,16 @@ launchTerminalAutoscreen conf = case terminal conf of
 
   -- Fall back to just launching the terminal with screen as usual
   term -> spawn term
-  where autoscreen = spawn . ("urxvt -e \"$HOME/.xmonad/autoscreen.sh\" " ++)
-                 =<< currentWorkspaceID
+  where
+    autoscreen = spawn
+               . ("urxvt -e \"$HOME/.xmonad/autoscreen.sh\" " ++)
+               . translateWSToScreenWin
+             =<< currentWorkspaceID
+
+    translateWSToScreenWin "0" = "10"
+    translateWSToScreenWin ('F' : digits) | all isDigit digits = '1' : digits
+    translateWSToScreenWin digits | all isDigit digits = digits
+                                  | otherwise = "0"
 
 newtype PreviousWorkspace = PreviousWorkspace WorkspaceId
   deriving (Read, Show, Typeable)
