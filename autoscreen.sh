@@ -4,5 +4,12 @@
 
 workspace="$1"
 
-screen -x -p "$workspace" ||
+if
+  which screen >/dev/null &&
+    [[ -n $workspace ]]
+then
+  screen -x -p "$workspace" ||
+    $SHELL
+else
   $SHELL
+fi
