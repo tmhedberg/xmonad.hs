@@ -110,10 +110,11 @@ myConfig = docks $ ewmh $ withUrgencyHook NoUrgencyHook def
         avoidStruts myLayouts
     , handleEventHook = fullscreenEventHook
     , workspaces = map fst allWorkspacesKeys
-    } `additionalKeys` myKeys
+    } `additionalKeys` myKeys myConfig
 
 -- Custom key bindings
-myKeys =
+myKeys :: XConfig l -> [((KeyMask, KeySym), X ())]
+myKeys conf =
   [ ((my_modKey .|. shiftMask, xK_l), spawn cmd_lockScreen)
   , ((0, keyCode_volDown), spawn cmd_volDown)
   , ((0, keyCode_volUp), spawn cmd_volUp)
@@ -145,11 +146,26 @@ myKeys =
   , ((my_modKey .|. shiftMask, xK_i), clearPIPWin)
   , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
   , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
+
+  -- Custom terminal launch
+  , ((my_modKey .|. shiftMask, xK_Return), launchTerminalAutoscreen conf)
+  , ((my_modKey .|. controlMask .|. shiftMask, xK_Return), spawn $ terminal conf)
   ]
     ++ [((my_modKey, k), toggleWorkspace ws) | (ws, k) <- allWorkspacesKeys]
     ++ [ ((my_modKey .|. shiftMask, k), windows $ shift ws)
        | (ws, k) <- allWorkspacesKeys
        ]
+
+launchTerminalAutoscreen :: XConfig l -> X ()
+launchTerminalAutoscreen conf = case terminal conf of
+  "urxvt" -> autoscreen
+
+  -- Add cases for other terminals here
+
+  -- Fall back to just launching the terminal with screen as usual
+  term -> spawn term
+  where autoscreen = spawn . ("urxvt -e \"$HOME/.xmonad/autoscreen.sh\" " ++)
+                 =<< currentWorkspaceID
 
 newtype PreviousWorkspace = PreviousWorkspace WorkspaceId
   deriving (Read, Show, Typeable)
@@ -180,9 +196,8 @@ clearPIPWin = XS.put $ PIPWindow Nothing
 toggleWorkspace :: WorkspaceId -> X ()
 toggleWorkspace wsid = do
   PreviousWorkspace prevWSID <- XS.get
-  xstate <- get
-  let curWSID = tag $ workspace $ current $ windowset xstate
-      nextWSID = if curWSID == wsid then prevWSID else wsid
+  curWSID <- currentWorkspaceID
+  let nextWSID = if curWSID == wsid then prevWSID else wsid
 
   -- Move the PIP window, if one exists and is on the current workspace, to the
   -- destination workspace
@@ -308,3 +323,6 @@ focusedWindowFloatingIndicator = do
       | win `S.member` M.keysSet (floating $ windowset xstate) = Just "^"
       | otherwise = Nothing
   maybe Nothing indicateFloating <$> focusedWindow
+
+currentWorkspaceID :: X String
+currentWorkspaceID = gets $ tag . workspace . current . windowset
