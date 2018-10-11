@@ -169,7 +169,7 @@ launchTerminalAutoscreen conf = case terminal conf of
   term -> spawn term
   where
     autoscreen = spawn
-               . ("urxvt -e \"$HOME/.xmonad/autoscreen.sh\" " ++)
+               . ("urxvt -title urxvt -e \"$HOME/.xmonad/autoscreen.sh\" " ++)
                . translateWSToScreenWin
              =<< currentWorkspaceID
 
