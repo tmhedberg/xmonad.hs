@@ -39,7 +39,7 @@ import XMonad.Util.Run
 
 -- Shell commands
 cmd_browser = "exec google-chrome"
-cmd_lockScreen = "xscreensaver-command -lock"
+cmd_lockScreen = "xset s activate"
 cmd_volDown = "amixer set Master 1%- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1%+ unmute; amixer -c 1 set Speaker 1+ unmute"
 cmd_volMute = "for ctrl in Master Headphone Speaker PCM; do amixer set $ctrl toggle; done"
