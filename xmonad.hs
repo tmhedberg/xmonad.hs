@@ -38,7 +38,7 @@ import qualified XMonad.Util.NamedScratchpad as NS
 import XMonad.Util.Run
 
 -- Shell commands
-cmd_browser = "exec google-chrome"
+cmd_browser = "exec google-chrome --enable-features=NativeNotifications"
 cmd_lockScreen = "xset s activate"
 cmd_volDown = "amixer set Master 1%- unmute; amixer -c 1 set Speaker 1- unmute"
 cmd_volUp = "amixer set Master 1%+ unmute; amixer -c 1 set Speaker 1+ unmute"
