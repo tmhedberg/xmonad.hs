@@ -196,11 +196,11 @@ instance ExtensionClass PIPWindow where
 -- This floats the window and makes it follow the current workspace.
 makePIPWin :: X ()
 makePIPWin = withFocused $ \win ->
-  clearPIPWin >> Op.float win >> XS.put (PIPWindow $ Just win)
+  clearPIPWin >> Op.float win >> XS.put (PIPWindow $ Just win) >> runLogHook
 
 -- | Clear the PIP window
 clearPIPWin :: X ()
-clearPIPWin = XS.put $ PIPWindow Nothing
+clearPIPWin = XS.put (PIPWindow Nothing) >> runLogHook
 
 -- | Switch to a workspace, or if it's already selected, switch back to the
 -- previous one
@@ -282,6 +282,7 @@ myStatusBar = statusBar' ("dzen2 " ++ flags) dzenPP' $ const (my_modKey, xK_b)
           , ppExtras =
               (fmap (dzenColor dk md . pad . dzenEscape)
                 <$> focusedWindowFloatingIndicator)
+                : ((fmap $ dzenColor dk md . pad) <$> pipWindowIndicator)
                 : ([willFloatNextPP, willFloatAllNewPP]
                     <*> pure
                           (dzenColor dk md
@@ -337,3 +338,11 @@ focusedWindowFloatingIndicator = do
 
 currentWorkspaceID :: X String
 currentWorkspaceID = gets $ tag . workspace . current . windowset
+
+pipWindowIndicator :: X (Maybe String)
+pipWindowIndicator = do
+  PIPWindow m_pipWin <- XS.get
+  m_focusWin <- focusedWindow
+  return $ case (m_focusWin, m_pipWin) of
+    (Just focusWin, Just pipWin) | focusWin == pipWin -> Just "="
+    otherwise -> Nothing
