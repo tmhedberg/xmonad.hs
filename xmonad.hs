@@ -10,11 +10,13 @@ import Data.Char
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+import qualified System.Environment as Env
 import System.Exit (exitSuccess)
 
 import XMonad hiding (focus)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.WorkspaceNames
+import XMonad.Core
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FloatNext
@@ -145,6 +147,9 @@ myKeys conf =
   , ((my_modKey, xK_v), spawn cmd_inactiveDim)
   , ((my_modKey, xK_i), makePIPWin)
   , ((my_modKey .|. shiftMask, xK_i), clearPIPWin)
+
+  , ((my_modKey .|. controlMask, xK_e), setEnv)
+
   , ((my_modKey .|. shiftMask, xK_q), return ()) -- Unbind default "exit xmonad" chord
   , ((my_modKey .|. shiftMask .|. mod1Mask, xK_q), io exitSuccess)   -- Exit with <Mod+Shift+Alt+Q>
 
@@ -346,3 +351,11 @@ pipWindowIndicator = do
   return $ case (m_focusWin, m_pipWin) of
     (Just focusWin, Just pipWin) | focusWin == pipWin -> Just "="
     otherwise -> Nothing
+
+setEnv :: X ()
+setEnv = do
+  s <- runProcessWithInput "dmenu" ["-p", "var=val"] ""
+  when (length s > 1) $ do
+    let (var, eq_val) = break (== '=') s
+        val = init $ drop 1 eq_val -- Strip leading '=' and trailing '\n'
+    liftIO $ if null val then Env.unsetEnv var else Env.setEnv var val
